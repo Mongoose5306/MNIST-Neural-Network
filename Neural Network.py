@@ -6,40 +6,7 @@ import math
 import time
 import random
 
-def convert(num):
-  exp = 0
-  ee = 0
-  for i in range(len(num)):
-    if num[i] == 'e':
-      ee = i
-      for i in range(len(num)):
-        if num[i] == '+' or num[i] == '-':
-          exp = num[i:len(num)]
-  finalstring = ''
-  aye = 0
-  if int(exp) < 0:
-    zero = '.'
-    for i in range(len(num)):
-      if num[i] == '.':
-        aye = i
-    for i in range((-1*int(exp)) - 1):
-      zero += "0" 
-    finalstring = zero+num[aye-1]+num[aye+1:ee]
-    return finalstring
-  elif int(exp)>0:
-      newstring = num[0:ee]
-      if len(num[0:ee])-2 > int(exp):
-        finalstring = str(num[0]) + str(num[2:2+int(exp)]) + '.' + str(num[2+int(exp):ee])
-      elif len(num[0:ee])-2 < int(exp):
-        zero = ""
-        for i in range(int(exp)-(len(newstring)-(2))):
-          zero += "0"
-        finalstring = num[0] + num[2:ee] + zero
-      elif len(newstring)-2 == int(exp[1:len(exp)]):
-        finalstring = num[0] + num[2:ee]
-      return finalstring
-
-
+# Importing training data and making it a numpy array for neural network to train on
 os.system('clear')
 j = 0
 fh = open("mnist.txt")
@@ -83,9 +50,7 @@ train_x = np.array(train_x)
 
 x = train_x.T
 
-
-
-
+# Opening testing data and making it a numpy array for neural network to test on
 j = 0
 fh = open("mnist2.txt")
 train_x = []
@@ -128,7 +93,7 @@ train_x = np.array(train_x)
 
 x2 = train_x.T
 
-
+# Convert values from larger numbers to numbers between 0 & 1
 def divide(x):
   return x/255
 div = np.vectorize(divide)
@@ -136,6 +101,8 @@ div = np.vectorize(divide)
 def divide2(x):
   return x/100
 div2 = np.vectorize(divide2)
+
+# Print handwritten number by using asterisks to represent handwriting
 def showNum(x, i):
   pri = []
   pr = []
@@ -158,15 +125,15 @@ def showNum(x, i):
     print(output)
     output = ""
 
+# Initializing weights, biases, and testing/training data
 weights1 = np.zeros((32,784))
 weights2 = np.zeros((10,32))
 biases1 = np.zeros((32,1))
 biases2 = np.zeros((10,1))
-
-
 x = div(x)
 x2 = div(x2)
 
+# Defining Sigmoid activation function and its derivative
 def sigma(x):
   try:
     return 1/(1+(math.exp(-x)))
@@ -181,6 +148,7 @@ def derivative(x):
     return 0.000001
 deriv = np.vectorize(derivative)
 
+# Defining Relu activation function and its derivative
 def Relu(x):
   return max(0,x)
 ReLu = np.vectorize(Relu)
@@ -191,14 +159,15 @@ def dRelu(x):
   else:
     return 1
 
+# Initializing weights and biases randomly
 def createParams():
-  #start with very tiny range
     w1 = np.random.uniform(low=-0.1, high=0.1, size = (32,784))
     b1 = np.random.uniform(low=-0.1, high=0.1, size = (32,1))
     w2 = np.random.uniform(low=-0.1, high=0.1, size = (10,32))
     b2 = np.random.uniform(low=-0.1, high=0.1, size = (10,1))
     return w1, b1, w2, b2
 
+# Defining dropout function here, never used in network however, because network is not complex enough to merit using dropout. Other methods are used to prevent overfitting
 def dropout(layer, probability):
   i = 0
   numbers = []
@@ -213,6 +182,7 @@ def dropout(layer, probability):
     else:
       continue
 
+# Forward propogation
 def forward(x, w1, b1, w2, b2, y):
     expected = np.zeros((10,1))
     expected[y][0] = 1
@@ -234,6 +204,7 @@ def forward(x, w1, b1, w2, b2, y):
     return layer1, l1, layer2, l2, loss
     expected[y] = 0
 
+# Backpropogation: computes derivatives of each weight/bias with respect to loss function using chain rule
 def backprop(x, l1, layer1, w1, l2, layer2, w2, y):
     dW1 = np.zeros((32,784))
     dB1 = np.zeros((32,1))
@@ -254,7 +225,7 @@ def backprop(x, l1, layer1, w1, l2, layer2, w2, y):
     #print("")
     return dW1, dW2, dB1, dB2
 
-
+# Parameters are updated by moving "down the gradient" using the derivatives found in backpropogation, Gradient Descent
 def updateParams(w1, w2, b1, b2, dW1, dW2, dB1, dB2, scale):
   w1 = w1 - dW1.T*scale
   w2 = w2 - dW2*scale
@@ -267,6 +238,7 @@ def updateParams(w1, w2, b1, b2, dW1, dW2, dB1, dB2, scale):
   #print("")
   return w1, w2, b1, b2
 
+# Getting actual digit prediction from output layer
 def getPredictions(output):
   ma = output[0][0]
   index = 0
@@ -276,6 +248,7 @@ def getPredictions(output):
       index = i
   return index
 
+# Getting accuracy of neural network on a dataset
 def getAccuracy(outputs, y):
   correct = 0
   for i in range(len(outputs)):
@@ -283,6 +256,8 @@ def getAccuracy(outputs, y):
       correct += 1
   return correct/len(y)
 
+# Gradient descent
+# To prevent overfitting, gradient descent is only applied while accuracy on test set continues increasing. The moment we see a decrease in accuracy on the test set from one training iteration to another, training is declared complete. This way, network is not allowed time to overfit on training data.
 def gradientDescent(x, y, iterations):
   outputs = []
   firstlayer = np.zeros((10,1))
@@ -333,11 +308,13 @@ def gradientDescent(x, y, iterations):
         print("")
         #print(costa)
         abc += 1
+    # Checks if test set accuracy on this iteration is larger than accuracy on previous iteration. If so, continue training. If not, stop training.
     if len(accuracies) > 1:
       if accuracies[len(accuracies)-1] < accuracies[len(accuracies)-2]:
         truth = False
   return w1, w2, b1, b2
 
+# Running gradientDescent and saving trained weights & biases in files
 weights1, weights2, biases1, biases2 = gradientDescent(x, y, 3500)
 np.savetxt('weights3.txt', weights1, delimiter=',')
 np.savetxt('weights4.txt', weights2, delimiter=',')
@@ -345,10 +322,10 @@ np.savetxt('biases3.txt', biases1, delimiter=',')
 np.savetxt('biases4.txt', biases2, delimiter=',')
 
 print("Training Complete!")
-
 print("")
 print("")
 
+# One final check for accuracy on test set
 predictions2 = []
 expecteds2 = []
 for i in range(2030):
@@ -361,7 +338,7 @@ accuracy = getAccuracy(predictions2,expecteds2)
 print("Accuracy:", accuracy)
 print("")
 
-        
+# Running the neural network! Yay, you made it!     
 while True:
   i = input("Enter number: ")
   print("")
