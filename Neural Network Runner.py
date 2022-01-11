@@ -1,26 +1,10 @@
 import numpy as np
 import time
 import math
+import PIL
+from PIL import Image
 
-#early stopping: stop training before 95%
-#not how is usually solved in irl tho
-#have 3 sets: training set, slightly smaller validation set, and then different test set
-#divide training data into 90% training, 10% validation set
-#K-Fold Cross Validation, more sophisticated way of doing validation set
-
-#another way to handle overfit: regularization
-#force model to not overfit, overfitting happens when weights' magnitude increases too much
-#add component to loss function which penalizes big weights
-#L2 regularization
-
-#normalization: third way
-#input data between 0 and 1, divide by 255
-
-#dropout is not the first thing to try when overfitting, only useful with a huge network
-#see what happens when certain weights off, or 0
-#https://www.kdnuggets.com/2019/12/5-techniques-prevent-overfitting-neural-networks.html
-
-#use libraries
+#Way to run pre-trained NN, see README for more details
 
 def forward(x, w1, b1, w2, b2, y):
     expected = np.zeros((10,1))
@@ -44,6 +28,8 @@ def sigma(x):
     return 0.000001
 sig = np.vectorize(sigma)
 
+
+# gets actual digit prediction from output layer
 def getPredictions(output):
   ma = output[0][0]
   index = 0
@@ -60,6 +46,7 @@ def getAccuracy(outputs, y):
       correct += 1
   return correct/len(y)
 
+#using files to initialize weights and biases
 weights1 = np.zeros((32,784))
 
 fh = open('weights3.txt')
@@ -89,8 +76,6 @@ for i in range(10):
   for j in range(len(lis[i])):
     weights2[i][j] = lis[i][j]
 
-#print(weights2.shape)
-
 biases1 = np.zeros((32,1))
 
 fh = open('biases3.txt')
@@ -104,8 +89,6 @@ for i in range(32):
 for i in range(32):
   for j in range(len(lis[i])):
     biases1[i][j] = lis[i][j]
-
-#print(biases1.shape)
 
 biases2 = np.zeros((10,1))
 
@@ -121,8 +104,7 @@ for i in range(10):
   for j in range(len(lis[i])):
     biases2[i][j] = lis[i][j]
 
-#print(biases2.shape)
-
+#converting txt file into numpy array which can be used by program    
 j = 0
 fh = open("mnist2.txt")
 train_x = []
@@ -163,6 +145,7 @@ for i in range(len(li)):
 
 train_x = np.array(train_x)
 
+# prints the actual handwritten number, using asterisks to represent the handwriting
 def showNum(x, i):
   pri = []
   pr = []
@@ -206,32 +189,7 @@ prediction = 0
 correct = 0
 i = 0
 
-import PIL
-from PIL import Image
-import numpy as np
-
-def showNum(x, i):
-  pri = []
-  pr = []
-  for k in range(28):
-    for l in range(28):
-      if x[:,i][28*k+l] > 0:
-        pr.append("*")
-        pr.append(" ")
-      else:
-        pr.append(" ")
-        pr.append(" ")
-    pri.append(pr)
-    pr = []
-
-  output = ""
-  for m in range(len(pri)):
-    for n in range(len(pri[m])):
-      output += pri[m][n]
-      output += ""
-    print(output)
-    output = ""
-
+# currently commented out, use if you want to handwrite your own numbers to test the neural network on
 """x = np.zeros((784,1))
 img = PIL.Image.open('Thre.jpg')
 pix = img.load()
