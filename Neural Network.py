@@ -339,10 +339,10 @@ def gradientDescent(x, y, iterations):
   return w1, w2, b1, b2
 
 weights1, weights2, biases1, biases2 = gradientDescent(x, y, 3500)
-np.savetxt('weights3v2.txt', weights1, delimiter=',')
-np.savetxt('weights4v2.txt', weights2, delimiter=',')
-np.savetxt('biases3v2.txt', biases1, delimiter=',')
-np.savetxt('biases4v2.txt', biases2, delimiter=',')
+np.savetxt('weights3.txt', weights1, delimiter=',')
+np.savetxt('weights4.txt', weights2, delimiter=',')
+np.savetxt('biases3.txt', biases1, delimiter=',')
+np.savetxt('biases4.txt', biases2, delimiter=',')
 
 print("Training Complete!")
 
