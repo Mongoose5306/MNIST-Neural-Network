@@ -16,3 +16,5 @@ Neural Network Stats:
  - Learning Rate: 0.01
 
  - Average training time: 14.15 seconds
+
+The two files titled MNIST 
