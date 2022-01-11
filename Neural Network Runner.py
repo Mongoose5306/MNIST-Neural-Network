@@ -4,8 +4,9 @@ import math
 import PIL
 from PIL import Image
 
-#Way to run pre-trained NN, see README for more details
+# Way to run pre-trained NN, see README for more details
 
+# Forward propogation
 def forward(x, w1, b1, w2, b2, y):
     expected = np.zeros((10,1))
     expected[y][0] = 1
@@ -21,6 +22,7 @@ def forward(x, w1, b1, w2, b2, y):
     return layer1, l1, layer2, l2, loss
     expected[y] = 0
 
+# Activation Function
 def sigma(x):
   try:
     return 1/(1+(math.exp(-x)))
@@ -29,7 +31,7 @@ def sigma(x):
 sig = np.vectorize(sigma)
 
 
-# gets actual digit prediction from output layer
+# Gets actual digit prediction from output layer
 def getPredictions(output):
   ma = output[0][0]
   index = 0
@@ -39,6 +41,7 @@ def getPredictions(output):
       index = i
   return index
 
+# Gets accuracy of neural network on a set of data
 def getAccuracy(outputs, y):
   correct = 0
   for i in range(len(outputs)):
@@ -46,7 +49,7 @@ def getAccuracy(outputs, y):
       correct += 1
   return correct/len(y)
 
-#using files to initialize weights and biases
+# Using file to initialize weights between input and hidden layer
 weights1 = np.zeros((32,784))
 
 fh = open('weights3.txt')
@@ -61,7 +64,7 @@ for i in range(32):
   for j in range(len(lis[i])):
     weights1[i][j] = lis[i][j]
 
-#print(weights1.shape)
+# Using file to initialize weights between hidden layer and output
 weights2 = np.zeros((10,32))
 
 fh = open('weights4.txt')
@@ -76,6 +79,7 @@ for i in range(10):
   for j in range(len(lis[i])):
     weights2[i][j] = lis[i][j]
 
+# Using file to initialize biases on hidden layer
 biases1 = np.zeros((32,1))
 
 fh = open('biases3.txt')
@@ -90,6 +94,7 @@ for i in range(32):
   for j in range(len(lis[i])):
     biases1[i][j] = lis[i][j]
 
+# Using file to initialize biases on output layer    
 biases2 = np.zeros((10,1))
 
 fh = open('biases4.txt')
@@ -104,7 +109,7 @@ for i in range(10):
   for j in range(len(lis[i])):
     biases2[i][j] = lis[i][j]
 
-#converting txt file into numpy array which can be used by program    
+# Converts txt file into numpy array which can be used by program    
 j = 0
 fh = open("mnist2.txt")
 train_x = []
@@ -145,7 +150,7 @@ for i in range(len(li)):
 
 train_x = np.array(train_x)
 
-# prints the actual handwritten number, using asterisks to represent the handwriting
+# Prints the actual handwritten number, using asterisks to represent the handwriting
 def showNum(x, i):
   pri = []
   pr = []
@@ -168,6 +173,7 @@ def showNum(x, i):
     print(output)
     output = ""
 
+# Regularizing data to be between 0 & 1 as opposed to being between 0 & 255
 def divide(x):
   return x/255
 div = np.vectorize(divide)
@@ -175,7 +181,7 @@ div = np.vectorize(divide)
 x = train_x.T
 x = div(x)
 
-
+# Testing network on test set
 predictions2 = []
 expecteds2 = []
 for i in range(2030):
@@ -189,7 +195,7 @@ prediction = 0
 correct = 0
 i = 0
 
-# currently commented out, use if you want to handwrite your own numbers to test the neural network on
+# Currently commented out, use if you want to handwrite your own numbers to test the neural network on
 """x = np.zeros((784,1))
 img = PIL.Image.open('Thre.jpg')
 pix = img.load()
@@ -204,13 +210,14 @@ for i in range(28):
             x[28*i+j][0] = 0
         su = 0
 """
-
+# Intializing layers of nodes
 layer1 = np.zeros((32,1))
 l1 = np.zeros((32,1))
 layer2 = np.zeros((10,1))
 l2 = np.zeros((10,1))
 cost = 0
 
+# Running network! Yay, you made it!
 while True:
     num111 = int(input("Enter a number: "))
     showNum(x, num111)
