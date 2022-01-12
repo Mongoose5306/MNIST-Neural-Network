@@ -6,7 +6,6 @@ Neural Network Stats:
  - Contains 2 hidden layers
     - Input layer: 784 nodes
     - Hidden layer #1: 32 nodes
-    - Hidden layer #2: 10 nodes
     - Output layer: 10 nodes
   
  - Activation Function: Sigmoid Function
