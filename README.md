@@ -1,6 +1,6 @@
 # MNIST-Neural-Network
 
-A multilayer perceptron neural network with 2 hidden layers trained on the MNIST dataset. Achieved 88% accuracy on the test set, trained using gradient descent.
+A multilayer perceptron neural network with 1 hidden layer trained on the MNIST dataset. Achieved 88% accuracy on the test set, trained using gradient descent.
 
 Neural Network Stats:
  - Contains 1 hidden layer
