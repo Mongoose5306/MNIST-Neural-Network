@@ -19,6 +19,6 @@ Neural Network Stats:
 
 The file titled "mnist.txt" is the training data, and the file titled "mnist2.txt" is the test data.
 
-"Neural Network.py" actually trains the network and saves the weights and biases in 4 text files.
+"Neural Network.py" trains the network and saves the weights and biases in 4 text files.
 
 "Neural Network Runner.py" uses the weights and biases given in those files to create a new neural network, so you can use the Network without having to train it.
