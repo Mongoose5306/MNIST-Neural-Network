@@ -3,10 +3,11 @@
 A multilayer perceptron neural network with 2 hidden layers trained on the MNIST dataset. Achieved 88% accuracy on the test set, trained using gradient descent.
 
 Neural Network Stats:
- - Contains 2 hidden layers
+ - Contains 1 hidden layer
     - Input layer: 784 nodes
     - Hidden layer #1: 32 nodes
     - Output layer: 10 nodes
+    - Total Parameters: 25,408 weights + 42 biases = 25,450 total parameters
   
  - Activation Function: Sigmoid Function
  
