@@ -167,7 +167,8 @@ def createParams():
     b2 = np.random.uniform(low=-0.1, high=0.1, size = (10,1))
     return w1, b1, w2, b2
 
-# Defining dropout function here, never used in network however, because network is not complex enough to merit using dropout. Other methods are used to prevent overfitting
+""" Defining dropout function here, never used in network however, because network is not complex enough to merit using dropout. 
+Other methods are used to prevent overfittin """
 def dropout(layer, probability):
   i = 0
   numbers = []
@@ -257,7 +258,8 @@ def getAccuracy(outputs, y):
   return correct/len(y)
 
 # Gradient descent
-# To prevent overfitting, gradient descent is only applied while accuracy on test set continues increasing. The moment we see a decrease in accuracy on the test set from one training iteration to another, training is declared complete. This way, network is not allowed time to overfit on training data.
+""" To prevent overfitting, gradient descent is only applied while accuracy on test set continues increasing. The moment we see a decrease in accuracy on the 
+test set from one training iteration to another, training is declared complete. This way, network is not allowed time to overfit on training data. """
 def gradientDescent(x, y, iterations):
   outputs = []
   firstlayer = np.zeros((10,1))
