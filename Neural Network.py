@@ -277,7 +277,6 @@ def getAccuracy(outputs, y):
 ####################################### Gradient Descent ###########################################
 ####################################################################################################
 def gradientDescent(x, y, iterations):                                              # 
-  firstlayer = np.zeros((10,1))
   layers = []
   w1, b1, w2, b2 = createParams()
   cost = 0
