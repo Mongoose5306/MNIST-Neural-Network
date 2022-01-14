@@ -276,18 +276,17 @@ def getAccuracy(outputs, y):
 ####################################################################################################
 ####################################### Gradient Descent ###########################################
 ####################################################################################################
-def gradientDescent(x, y, iterations):                                              # 
-  layers = []
-  w1, b1, w2, b2 = createParams()
+def gradientDescent(x, y, iterations):                                              
+  w1, b1, w2, b2 = createParams()                                 # Randomly initialize weights and biases
   cost = 0
-  accuracy = 0.1
+  accuracy = 0.01
   accuracies = []
-  truth = True
+  truth = True                                                    # Truth is true as long as accuracy on test set increases 
   while truth == True:
-    predictions = []
-    predictions2 = []
-    expecteds2 = []
-    expected = []
+    predictions = []                                              # Stores network predictions for training data
+    predictions2 = []                                             # Stores network predictions for testing data
+    expecteds2 = []                                               # Stores expected outputs for testing data
+    expected = []                                                 # Stores expected outputs for training data
     x3 = np.zeros((784,3500))
     y3 = []
     xd = []
