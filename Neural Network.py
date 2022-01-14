@@ -102,11 +102,11 @@ x2 = train_x.T
 ####################################################################################################
 def divide(x):
   return x/255
-div = np.vectorize(divide)                                          # convert function to a function that can be called on a numpy array
+div = np.vectorize(divide)     # convert function to a function that can be called on a numpy array
 
 def divide2(x):
   return x/100
-div2 = np.vectorize(divide2)                                        # convert function to a function that can be called on a numpy array
+div2 = np.vectorize(divide2)   # convert function to a function that can be called on a numpy array
 
 ####################################################################################################
 ############## Print handwritten number by using asterisks to represent handwriting ################
@@ -116,11 +116,11 @@ def showNum(x, i):
   pr = []
   for k in range(28):
     for l in range(28):
-      if x[:,i][28*k+l] > 0:                                        # if array's pixel value is greater than 0, draw an asterisk
+      if x[:,i][28*k+l] > 0:  # if array's pixel value is greater than 0, draw an asterisk
         pr.append("*")
         pr.append(" ")
       else:
-        pr.append(" ")                                              # else, leave it blank
+        pr.append(" ")        # else, leave it blank
         pr.append(" ")
     pri.append(pr)
     pr = []
@@ -148,17 +148,17 @@ x2 = div(x2)
 #################################################################################################### 
 def sigma(x):
   try:
-    return 1/(1+(math.exp(-x)))                                    # Sigmoid function
+    return 1/(1+(math.exp(-x)))                       # Sigmoid function
   except:
-    return 0.000001                                                # if the value returned by the function is too small, just return a given number
-sig = np.vectorize(sigma)                                          # converting function to one that can be applied on a numpy array
+    return 0.000001                                   # if the value returned by the function is too small, just return a given number
+sig = np.vectorize(sigma)                             # converting function to one that can be applied on a numpy array
 
 def derivative(x):
   try:
-    return math.exp(-x)/((1+math.exp(-x))**2)                      # Sigmoid function derivative
+    return math.exp(-x)/((1+math.exp(-x))**2)         # Sigmoid function derivative
   except:
-    return 0.000001                                                # if the value returned by the function is too small, just return a given number
-deriv = np.vectorize(derivative)                                   # converting function to one that can be applied on a numpy array
+    return 0.000001                                   # if the value returned by the function is too small, just return a given number
+deriv = np.vectorize(derivative)                      # converting function to one that can be applied on a numpy array
 
 ####################################################################################################
 ###################### Defining Relu activation function and its derivative ########################
