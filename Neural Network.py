@@ -241,20 +241,19 @@ def backprop(x, l1, layer1, w1, l2, layer2, w2, y):
     #print("")
     return dW1, dW2, dB1, dB2                                     # Return derivatives
 
-# Parameters are updated by moving "down the gradient" using the derivatives found in backpropogation, Gradient Descent
+####################################################################################################
+############################## Updating Parameters With Derivatives ################################
+####################################################################################################
 def updateParams(w1, w2, b1, b2, dW1, dW2, dB1, dB2, scale):
-  w1 = w1 - dW1.T*scale
-  w2 = w2 - dW2*scale
-  b1 = b1 - dB1*scale
-  b2 = b2 - dB2 * scale
-  #print(w1)
-  #print(w2)
-  #print(b1)
-  #print(b2)
-  #print("")
-  return w1, w2, b1, b2
+  w1 = w1 - dW1.T*scale                                           # Update first weights layer
+  w2 = w2 - dW2*scale                                             # Update second weights layer
+  b1 = b1 - dB1*scale                                             # Update first biases layer
+  b2 = b2 - dB2 * scale                                           # Update second biases layer
+  return w1, w2, b1, b2                                           # Return updated weights and biases
 
-# Getting actual digit prediction from output layer
+####################################################################################################
+####################### Getting actual digit prediction from output layer ##########################
+####################################################################################################
 def getPredictions(output):
   ma = output[0][0]
   index = 0
@@ -264,7 +263,9 @@ def getPredictions(output):
       index = i
   return index
 
-# Getting accuracy of neural network on a dataset
+####################################################################################################
+############################## Getting accuracy of neural network ##################################
+####################################################################################################
 def getAccuracy(outputs, y):
   correct = 0
   for i in range(len(outputs)):
@@ -272,22 +273,15 @@ def getAccuracy(outputs, y):
       correct += 1
   return correct/len(y)
 
-# Gradient descent
-""" To prevent overfitting, gradient descent is only applied while accuracy on test set continues increasing. The moment we see a decrease in accuracy on the 
-test set from one training iteration to another, training is declared complete. This way, network is not allowed time to overfit on training data. """
-def gradientDescent(x, y, iterations):
-  outputs = []
+####################################################################################################
+####################################### Gradient Descent ###########################################
+####################################################################################################
+def gradientDescent(x, y, iterations):                                              # 
   firstlayer = np.zeros((10,1))
-  costs = []
   layers = []
-  expected = []
   w1, b1, w2, b2 = createParams()
   cost = 0
-  costa = 1
-  j = 0
   accuracy = 0.1
-  a = 0
-  abc = 0
   accuracies = []
   truth = True
   while truth == True:
@@ -301,14 +295,10 @@ def gradientDescent(x, y, iterations):
     randoms = []
     for i in range(3500):
       layer1, l1, layer2, l2, cost = forward(x[:,i], w1, b1, w2, b2, y[i][0])
-      costs.append(cost)
       predictions.append(getPredictions(l2))
       expected.append(y[i][0])
       dW1, dW2, dB1, dB2 = backprop(x[:,i], l1, layer1, w1, l2, layer2, w2, y[i])
       w1, w2, b1, b2 = updateParams(w1, w2, b1, b2, dW1, dW2, dB1, dB2, 0.01)
-    costa = sum(costs)/len(costs)
-    costs = []
-    j+=1
     for i in range(2030):
         layer1, l1, layer2, l2, cost = forward(x2[:,i], w1, b1, w2, b2, y2[i][0])
         #print(l2)
@@ -317,14 +307,11 @@ def gradientDescent(x, y, iterations):
         expecteds2.append(y2[i][0])
     accuracy2 = getAccuracy(predictions2,expecteds2)
     accuracies.append(accuracy2)
-    if j % 1 == 0:
-        accuracy = getAccuracy(predictions,expected)
-        print("Iteration #" + str(j))
-        print("Accuracy On Training:", accuracy)
-        print("Accuracy On Test:", accuracy2)
-        print("")
-        #print(costa)
-        abc += 1
+    accuracy = getAccuracy(predictions,expected)
+    print("Iteration #" + str(j))
+    print("Accuracy On Training:", accuracy)
+    print("Accuracy On Test:", accuracy2)
+    print("")
     # Checks if test set accuracy on this iteration is larger than accuracy on previous iteration. If so, continue training. If not, stop training.
     if len(accuracies) > 1:
       if accuracies[len(accuracies)-1] < accuracies[len(accuracies)-2]:
