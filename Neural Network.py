@@ -277,45 +277,44 @@ def getAccuracy(outputs, y):
 ####################################### Gradient Descent ###########################################
 ####################################################################################################
 def gradientDescent(x, y, iterations):                                              
-  w1, b1, w2, b2 = createParams()                                 # Randomly initialize weights and biases
+  w1, b1, w2, b2 = createParams()                                                       # Randomly initialize weights and biases
   cost = 0
   accuracy = 0.01
-  accuracies = []
-  truth = True                                                    # Truth is true as long as accuracy on test set increases 
+  accuracies = []                                                                       # Stores network accuracies on testing data
+  truth = True                                                                          # Truth is true as long as accuracy on test set increases 
   while truth == True:
-    predictions = []                                              # Stores network predictions for training data
-    predictions2 = []                                             # Stores network predictions for testing data
-    expecteds2 = []                                               # Stores expected outputs for testing data
-    expected = []                                                 # Stores expected outputs for training data
+    predictions = []                                                                    # Stores network predictions for training data
+    predictions2 = []                                                                   # Stores network predictions for testing data
+    expecteds2 = []                                                                     # Stores expected outputs for testing data
+    expected = []                                                                       # Stores expected outputs for training data
     xd = []
     randoms = []
     for i in range(3500):
-      layer1, l1, layer2, l2, cost = forward(x[:,i], w1, b1, w2, b2, y[i][0])
-      predictions.append(getPredictions(l2))
-      expected.append(y[i][0])
-      dW1, dW2, dB1, dB2 = backprop(x[:,i], l1, layer1, w1, l2, layer2, w2, y[i])
-      w1, w2, b1, b2 = updateParams(w1, w2, b1, b2, dW1, dW2, dB1, dB2, 0.01)
+      layer1, l1, layer2, l2, cost = forward(x[:,i], w1, b1, w2, b2, y[i][0])           # Runs forward propogation on training data
+      predictions.append(getPredictions(l2))                                            # Appends the network's predicted digit to the array for training data
+      expected.append(y[i][0])                                                          # Appends the expected/correct value to the other array for training data
+      dW1, dW2, dB1, dB2 = backprop(x[:,i], l1, layer1, w1, l2, layer2, w2, y[i])       # Backpropogation
+      w1, w2, b1, b2 = updateParams(w1, w2, b1, b2, dW1, dW2, dB1, dB2, 0.01)           # Updating params using backpropogation returned values
     for i in range(2030):
-        layer1, l1, layer2, l2, cost = forward(x2[:,i], w1, b1, w2, b2, y2[i][0])
-        #print(l2)
-        #print("")
-        predictions2.append(getPredictions(l2))
-        expecteds2.append(y2[i][0])
-    accuracy2 = getAccuracy(predictions2,expecteds2)
-    accuracies.append(accuracy2)
-    accuracy = getAccuracy(predictions,expected)
+        layer1, l1, layer2, l2, cost = forward(x2[:,i], w1, b1, w2, b2, y2[i][0])       # Forward propogation on testing data
+        predictions2.append(getPredictions(l2))                                         # Appends the network's prediction for testing data to array
+        expecteds2.append(y2[i][0])                                                     # Appends expected/correct value for testing data to other array
+    accuracy2 = getAccuracy(predictions2,expecteds2)                                    # Get accuracy for testing data using expected and predictions arrays
+    accuracies.append(accuracy2)                                                        # Append this accuracy to array
+    accuracy = getAccuracy(predictions,expected)                                        # Get accuracy for training data using expected and predictions arrays
     print("Iteration #" + str(j))
     print("Accuracy On Training:", accuracy)
     print("Accuracy On Test:", accuracy2)
     print("")
-    # Checks if test set accuracy on this iteration is larger than accuracy on previous iteration. If so, continue training. If not, stop training.
     if len(accuracies) > 1:
-      if accuracies[len(accuracies)-1] < accuracies[len(accuracies)-2]:
-        truth = False
+      if accuracies[len(accuracies)-1] < accuracies[len(accuracies)-2]:                 # If accuracy on testing data is less this iteration, stop training
+        truth = False             
   return w1, w2, b1, b2
 
-# Running gradientDescent and saving trained weights & biases in files
-weights1, weights2, biases1, biases2 = gradientDescent(x, y, 3500)
+####################################################################################################
+################ Running Gradient Descent and saving trained weights & biases in files #############
+####################################################################################################
+weights1, weights2, biases1, biases2 = gradientDescent(x, y, 3500)                      # 
 np.savetxt('weights3.txt', weights1, delimiter=',')
 np.savetxt('weights4.txt', weights2, delimiter=',')
 np.savetxt('biases3.txt', biases1, delimiter=',')
