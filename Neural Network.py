@@ -164,10 +164,10 @@ deriv = np.vectorize(derivative)                      # converting function to o
 ###################### Defining Relu activation function and its derivative ########################
 #################################################################################################### 
 def Relu(x):
-  return max(0,x)                                                  # ReLu function
-ReLu = np.vectorize(Relu)                                          # converting function to one that can be applied on a numpy array
+  return max(0,x)                                     # ReLu function
+ReLu = np.vectorize(Relu)                             # converting function to one that can be applied on a numpy array
 
-def dRelu(x):                                                      # ReLu function derivative
+def dRelu(x):                                         # ReLu function derivative
   if x <=0:
     return 0                                                       
   else:
@@ -190,11 +190,11 @@ def dropout(layer, probability):
   i = 0
   numbers = []
   number = 0
-  x = probability*len(layer)                                       # Find number of neurons to "drop out" of layer
+  x = probability*len(layer)                         # Find number of neurons to "drop out" of layer
   while i < x:
-    number = random.randint(0,len(layer)-1)                        # Randomly pick neurons to drop out
-    if not(number in numbers):                                     # If neuron has already been chosen, don't drop out again 
-      layer[number][0] = 0                                         # Applying dropout
+    number = random.randint(0,len(layer)-1)          # Randomly pick neurons to drop out
+    if not(number in numbers):                       # If neuron has already been chosen, don't drop out again 
+      layer[number][0] = 0                           # Applying dropout
       i += 1
     else:
       continue
@@ -203,17 +203,17 @@ def dropout(layer, probability):
 ######################################## Forward propogation #######################################
 ####################################################################################################
 def forward(x, w1, b1, w2, b2, y):
-    expected = np.zeros((10,1))                                   # Defining expected output array
-    expected[y][0] = 1                                            # Making value at right index 1 (ex: If correct digit were 2, array would be [0, 0, 1, 0, 0, 0, 0, 0, 0, 0])
+    expected = np.zeros((10,1))                   # Defining expected output array
+    expected[y][0] = 1                            # Making value at right index 1 (ex: If correct digit were 2, array would be [0, 0, 1, 0, 0, 0, 0, 0, 0, 0])
     x = np.reshape(x, (784,1))     
-    layer1 = np.add(np.dot(w1, x), b1)                            # Getting first layer w/ weights and biases                           
-    l1 = sig(layer1)                                              # Applying sigmoid to first layer
-    layer2 = np.add(np.dot(w2, l1), b2)                           # Getting output layer w/ weights and biases
-    l2 = sig(layer2)                                              # Applying sigmoid to output layer
+    layer1 = np.add(np.dot(w1, x), b1)            # Getting first layer w/ weights and biases                           
+    l1 = sig(layer1)                              # Applying sigmoid to first layer
+    layer2 = np.add(np.dot(w2, l1), b2)           # Getting output layer w/ weights and biases
+    l2 = sig(layer2)                              # Applying sigmoid to output layer
     loss = 0
     w11 = np.square(w1)
     w22 = np.square(w2)
-    for i in range(len(l2)):                                      # Computing cost function with quadratic formula
+    for i in range(len(l2)):                      # Computing cost function with quadratic formula
       loss += (l2[i][0] - expected[i][0]) ** 2
     return layer1, l1, layer2, l2, loss
     expected[y] = 0
@@ -245,33 +245,33 @@ def backprop(x, l1, layer1, w1, l2, layer2, w2, y):
 ############################## Updating Parameters With Derivatives ################################
 ####################################################################################################
 def updateParams(w1, w2, b1, b2, dW1, dW2, dB1, dB2, scale):
-  w1 = w1 - dW1.T*scale                                           # Update first weights layer
-  w2 = w2 - dW2*scale                                             # Update second weights layer
-  b1 = b1 - dB1*scale                                             # Update first biases layer
-  b2 = b2 - dB2 * scale                                           # Update second biases layer
-  return w1, w2, b1, b2                                           # Return updated weights and biases
+  w1 = w1 - dW1.T*scale      # Update first weights layer
+  w2 = w2 - dW2*scale        # Update second weights layer
+  b1 = b1 - dB1*scale        # Update first biases layer
+  b2 = b2 - dB2 * scale      # Update second biases layer
+  return w1, w2, b1, b2      # Return updated weights and biases
 
 ####################################################################################################
 ####################### Getting actual digit prediction from output layer ##########################
 ####################################################################################################
 def getPredictions(output):
-  ma = output[0][0]
+  ma = output[0][0]                     # stores maxiumum value of output layer   
   index = 0
-  for i in range(1, len(output)):
+  for i in range(1, len(output)):       # loop through the layer, finding the maxiumum value
     if output[i][0] > ma:
       ma = output[i][0]
-      index = i
-  return index
+      index = i          
+  return index                          # return the index for the max value, this is the returned value
 
 ####################################################################################################
 ############################## Getting accuracy of neural network ##################################
 ####################################################################################################
 def getAccuracy(outputs, y):
-  correct = 0
+  correct = 0                           # stores how many the network gets correct
   for i in range(len(outputs)):
     if outputs[i] == y[i]:
-      correct += 1
-  return correct/len(y)
+      correct += 1                      # if the network's value = the expected value, add one to correct
+  return correct/len(y)                 # calculates and returns the percent correct
 
 ####################################################################################################
 ####################################### Gradient Descent ###########################################
@@ -287,8 +287,6 @@ def gradientDescent(x, y, iterations):
     predictions2 = []                                             # Stores network predictions for testing data
     expecteds2 = []                                               # Stores expected outputs for testing data
     expected = []                                                 # Stores expected outputs for training data
-    x3 = np.zeros((784,3500))
-    y3 = []
     xd = []
     randoms = []
     for i in range(3500):
