@@ -276,7 +276,7 @@ def getAccuracy(outputs, y):
 ####################################################################################################
 ####################################### Gradient Descent ###########################################
 ####################################################################################################
-def gradientDescent(x, y, iterations):                                              
+def gradientDescent(x, y):                                              
   w1, b1, w2, b2 = createParams()                                                       # Randomly initialize weights and biases
   cost = 0
   accuracy = 0.01
@@ -314,28 +314,30 @@ def gradientDescent(x, y, iterations):
 ####################################################################################################
 ################ Running Gradient Descent and saving trained weights & biases in files #############
 ####################################################################################################
-weights1, weights2, biases1, biases2 = gradientDescent(x, y, 3500)                      # 
-np.savetxt('weights3.txt', weights1, delimiter=',')
-np.savetxt('weights4.txt', weights2, delimiter=',')
-np.savetxt('biases3.txt', biases1, delimiter=',')
-np.savetxt('biases4.txt', biases2, delimiter=',')
+weights1, weights2, biases1, biases2 = gradientDescent(x, y)     # Running gradient descent
+np.savetxt('weights3.txt', weights1, delimiter=',')              # Saving trained weights layer
+np.savetxt('weights4.txt', weights2, delimiter=',')              # Saving second trained weights layer
+np.savetxt('biases3.txt', biases1, delimiter=',')                # Saving trained biases layer
+np.savetxt('biases4.txt', biases2, delimiter=',')                # Saving second trained biases layer
 
 print("Training Complete!")
 print("")
 print("")
 
-# One final check for accuracy on test set
-predictions2 = []
-expecteds2 = []
+
+####################################################################################################
+############################# One final check for accuracy on test set #############################
+####################################################################################################
+predictions2 = []                                                                                           # Network predictions
+expecteds2 = []                                                                                             # Correct/expected values
 for i in range(2030):
-    layer1, l1, layer2, l2, cost = forward(x2[:,i], weights1, biases1, weights2, biases2, y2[i][0])
-    #print(l2)
-    #print("")
-    predictions2.append(getPredictions(l2))
+    layer1, l1, layer2, l2, cost = forward(x2[:,i], weights1, biases1, weights2, biases2, y2[i][0])         # Forward propogation on test set  
+    #print(l2)   
+    predictions2.append(getPredictions(l2))                                                                 # Get predictions of neural network
     expecteds2.append(y2[i][0])
 accuracy = getAccuracy(predictions2,expecteds2)
 print("Accuracy:", accuracy)
-print("")
+print("") 
 
 # Running the neural network! Yay, you made it!     
 while True:
