@@ -334,14 +334,16 @@ for i in range(2030):
     layer1, l1, layer2, l2, cost = forward(x2[:,i], weights1, biases1, weights2, biases2, y2[i][0])         # Forward propogation on test set  
     #print(l2)   
     predictions2.append(getPredictions(l2))                                                                 # Get predictions of neural network
-    expecteds2.append(y2[i][0])
-accuracy = getAccuracy(predictions2,expecteds2)
+    expecteds2.append(y2[i][0])                                                                             # Append expected/correct values
+accuracy = getAccuracy(predictions2,expecteds2)                                                             # Use expected values and predictions to get accuracy
 print("Accuracy:", accuracy)
 print("") 
 
-# Running the neural network! Yay, you made it!     
+####################################################################################################
+#################################### Running the neural network ####################################
+####################################################################################################
 while True:
-  i = input("Enter number: ")
+  i = input("Enter number: ")                                                                               # Access which point of the dataset you want to try
   print("")
   i = int(i)
   layer1 = np.zeros((32,1))
@@ -351,10 +353,10 @@ while True:
   cost = 0
   showNum(x2,i)
   print("Correct value:", y2[i][0])
-  layer1, l1, layer2, l2, cost = forward(x2[:,i], weights1, biases1, weights2, biases2, y2[i][0])
+  layer1, l1, layer2, l2, cost = forward(x2[:,i], weights1, biases1, weights2, biases2, y2[i][0])          # Use forward propogation on this data point
   print("")
   for k in range(len(l2)):
-      print("Confidence that digit is", str(k) + ":", l2[k][0])
-  print("Final Prediction:", getPredictions(l2))
+      print("Confidence that digit is", str(k) + ":", l2[k][0])                                            # Print out values of each element in output array
+  print("Final Prediction:", getPredictions(l2))                                                           # Print network's final diit prediction
   print("")
   print("")
